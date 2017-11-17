@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>大毛驴后台</title>
+	<link rel="stylesheet" href="base_url/static/bootstrap-3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="base_url/static/css/common.css">
+	<script src="base_url/static/js/jquery-3.2.1.min.js"></script>
+	<script src="base_url/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="page-header">
+		<div class='container'>
+			{notempty name='$Think.session.user_id'}
+			<ul class="nav nav-pills pull-right">
+				<li role="presentation" class='dropdown'>
+				 <a href="base_url{:url('admin/User/index')}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$Think.session.user_name} <span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="base_url{:url('admin/User/changePassword')}">修改密码</a></li>
+		            <li role="separator" class="divider"></li>
+		            <li><a href="base_url{:url('admin/User/logout')}">退出登陆</a></li>
+		          </ul>
+		        </li>
+	        </ul>
+			{/notempty}
+		</div>
+	</div>
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-2'>
+				<ul class="list-group">
+					<a class="list-group-item {present name='cate'}active{/present}" href="{:url('admin/Category/index')}">栏目列表</a>
+					<a class="list-group-item {present name='goods'}active{/present}"" href="{:url('admin/Goods/index')}">商品列表</a>
+					<a class="list-group-item {present name='order'}active{/present}"" href="{:url('admin/Order/index')}">订单列表</a>
+					<a class="list-group-item {present name='user'}active{/present}"" href="{:url('admin/User/index')}">用户列表</a>
+				</ul>
+			</div>
+			<div class="col-md-10">
+			    {block name='content'}{/block}
+			</div>
+		</div>
+	</div>
+</body>
+</html>
