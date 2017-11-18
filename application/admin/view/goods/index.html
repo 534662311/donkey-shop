@@ -6,7 +6,35 @@
 	    <h3 class="panel-title">商品列表</h3>
 	  </div>
 	  <div class="panel-body">
-	    
+		  <table class="table table-hover">
+			 <thead>
+			 	<tr>
+					<th>id</th>
+					<th>商品名称</th>
+					<th>商城价格</th>
+					<th>市场价格</th>
+					<th>点击量</th>
+					<th>缩略图</th>
+					<th>操作</th>
+				</tr>
+			 </thead>
+			 <tbody>
+				{foreach $data as $v}
+				<tr>
+					<td>{$v.gid}</td>
+					<td>{$v.gname}</td>
+					<td>{$v.gprice}</td>
+					<td>{$v.mprice}</td>
+					<td>{$v.click}</td>
+					<td><img width='50' src="base_url/{$v.cover}" alt="{$v.gname}"></td>
+					<td>
+						<a href="base_url{:url('admin/Goods/edit', ['id'=>$v.gid])}" class='btn btn-default'>编辑</a>
+						<a href="base_url{:url('admin/Goods/delete', ['id'=>$v.gid])}" class='btn btn-danger'>删除</a>
+					</td>
+				</tr>
+				{/foreach}
+			 </tbody>
+		  </table>
 	  </div>
 	</div>
 {/block}

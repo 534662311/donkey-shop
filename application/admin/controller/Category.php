@@ -48,7 +48,7 @@ class Category extends Controller
             $file = request()->file('thumb');
             // 移动到框架应用根目录/public/uploads/ 目录下
             if($file){
-                $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+                $info = $file->move(ROOT_PATH . 'public/uploads');
                 if($info){
                     // 成功上传后 获取上传信息
                     // 输出 jpg
@@ -57,7 +57,7 @@ class Category extends Controller
                     echo $info->getSaveName();
                     // 输出 42a79759f284b767dfcb2a0197904287.jpg
                     echo $info->getFilename(); 
-                    $cate->thumb = 'uploads'.DS.$info->getSaveName();
+                    $cate->thumb = 'uploads/'.$info->getSaveName();
                 }else{
                     // 上传失败获取错误信息
                     echo $file->getError();

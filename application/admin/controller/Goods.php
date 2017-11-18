@@ -18,6 +18,8 @@ class Goods extends Controller
     {
         //激活列表标签状态
         $this->assign('goods', 'idx');
+        $data = GoodsModel::all();
+        $this->assign('data', $data);
         return $this->fetch();
     }
 
@@ -38,9 +40,9 @@ class Goods extends Controller
             }
             $cover = request()->file('cover');
             if($cover){
-                $re = $cover->move(ROOT_PATH.'public'.DS.'uploads');
+                $re = $cover->move(ROOT_PATH.'public/uploads');
                 if($re){
-                    $goods->cover = 'uploads'.$re->getSaveName();
+                    $goods->cover = 'uploads/'.$re->getSaveName();
                 }else{
                     $this->error($cover->getError());
                 }
@@ -49,9 +51,9 @@ class Goods extends Controller
             if($atlas){
                 $atlasArr = array();
                 foreach($atlas as $atla){
-                    $info = $atla->move(ROOT_PATH.'public'.DS.'uploads');
+                    $info = $atla->move(ROOT_PATH.'public/uploads');
                     if($info){
-                        array_push($atlasArr, 'uploads'.$re->getSaveName());
+                        array_push($atlasArr, 'uploads/'.$info->getSaveName());
                     }
                 }
             }
@@ -62,34 +64,12 @@ class Goods extends Controller
             $goods->details = input('post.details');
             $goods->description = input('post.description');
             if($goods->save()){
-                $this->success('新增成功！');
+                $this->success('新增成功！', 'admin/goods/index');
             }else{
                 $this->error('新增失败！');
             }
         }
         return $this->fetch();
-    }
-
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
     }
 
     /**
@@ -99,22 +79,69 @@ class Goods extends Controller
      * @return \think\Response
      */
     public function edit($id)
-    {
-        //
-    }
+    {       
+        //激活列表标签状态
+        $this->assign('goods', 'add');
 
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $data = GoodsModel::get($id);
+        //取出图片
+        $files = explode('|', $data->atlas);
 
+        $this->assign('data', $data);
+        $this->assign('files', $files);
+        return view();
+    }
+    //更新
+    public function update($id){
+        $goods = GoodsModel::get($id);
+        if(request()->isPost()){
+            $validate = Loader::validate('Goods');
+            if(!$validate->check(input('post.'))){
+                $this->error($validate->getError());
+            }
+            $cover = request()->file('cover');
+            if($cover){
+                //删除旧图片
+                $oldImg = ROOT_PATH.'public/'.$goods->cover;
+                unlink($oldImg);
+
+                $re = $cover->move(ROOT_PATH.'public/uploads');
+                if($re){
+                    $goods->cover = 'uploads/'.$re->getSaveName();
+                }else{
+                    $this->error($cover->getError());
+                }
+            }
+            $atlas = request()->file('atlas');
+            if($atlas){
+                //删除旧图片
+                $files = explode('|', $data->atlas);
+                foreach ($files as $v) {
+                    $oldImg = ROOT_PATH.'public/'.$v;
+                    unlink($oldImg);
+                }
+                
+                $atlasArr = array();
+                foreach($atlas as $atla){
+                    $info = $atla->move(ROOT_PATH.'public/uploads');
+                    if($info){
+                        array_push($atlasArr, 'uploads/'.$info->getSaveName());
+                    }
+                }
+            }
+            $goods->atlas = implode('|',$atlasArr);
+            $goods->gname = input('post.gname');
+            $goods->gprice  = input('post.gprice');
+            $goods->mprice  = input('post.mprice');
+            $goods->details = input('post.details');
+            $goods->description = input('post.description');
+            if($goods->save()){
+                $this->success('更新成功！', 'admin/goods/index');
+            }else{
+                $this->error('更新失败！');
+            }
+        }
+    }
     /**
      * 删除指定资源
      *
@@ -123,6 +150,8 @@ class Goods extends Controller
      */
     public function delete($id)
     {
-        //
+        if(GoodsModel::destroy($id)){
+            $this->success('删除成功！');
+        }
     }
 }

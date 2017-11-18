@@ -1,12 +1,86 @@
 {extend name='common'}
 {block name='content'}
-	{include file='goods/header'}
+{include file='goods/header'}
 	<div class="panel panel-default mt20">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">编辑商品</h3>
 	  </div>
 	  <div class="panel-body">
-	    
+	    <form action="{:url('admin/Goods/update', ['id'=>$data.gid])}" method='post' enctype="multipart/form-data">
+			<div class="form-group">
+			    <label>商品名称</label>
+			    <input name="gname" value="{$data.gname}" type="text" class="form-control" placeholder="商品名称">
+		  	</div>
+			<div class="form-group mt20">
+			    <label>商城价格</label>
+			    <input name="gprice" value="{$data.gprice}" type="text" class="form-control" placeholder="商城价格">
+		  	</div>
+			<div class="form-group mt20">
+			    <label>市场价格</label>
+			    <input name="mprice" value="{$data.mprice}" type="text" class="form-control" placeholder="市场价格">
+		  	</div>
+			<div class="form-group mt20">
+			    <label>商品封面</label>
+			    <div class='upload-img'>
+			       	<div id="inputBox">
+			       		<input type="file" name='cover' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+				   	</div>
+				   <!--展示图片-->
+				   <div class="imgBox">
+						<div class="imgContainer">
+							<img alt='{$data.gname}' src='base_url/{$data.cover}' onclick="imgDisplay(this)">
+							<p onclick="removeImg(this)" class="imgDelete">删除</p>
+						</div>
+				   </div>
+			   	</div>
+		  	</div>
+			<div class="form-group mt20">
+			    <label>商品图集</label>
+			    <div class='img-list'>
+		    		{foreach $files as $file}
+				    <div class='upload-img'>
+				       	<div id="inputBox">
+				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					   	</div>
+					   <!--展示图片-->
+					   <div class="imgBox">
+							<div class="imgContainer">
+								<img alt='{$data.gname}' src='base_url/{$file}' onclick="imgDisplay(this)">
+								<p onclick="removeImg(this)" class="imgDelete">删除</p>
+							</div>
+					   </div>
+				   	</div>
+					{/foreach}
+			   	</div>
+		  	</div>
+			<div class="form-group mt20">
+			    <label>商品描述</label>
+			    <input name="description" value="{$data.description}" type="text" class="form-control" placeholder="商品描述">
+		  	</div>
+			<div class="form-group mt20">
+			    <label>商品详情</label>
+				<script id="container" name="details" type="text/plain"></script>
+		  	</div>
+		  	<div class="form-group mt20">
+				<button type='submit' class='btn btn-default'>提交</button>
+		  	</div>
+	    </form>
 	  </div>
 	</div>
+{js href='base_url/static/ueditor/ueditor.config.js'}
+{js href='base_url/static/ueditor/ueditor.all.js'}
+{js href='base_url/static/js/upload.js'}
+<script type="text/javascript">
+	//初始化百度编辑框
+    var ue = UE.getEditor('container');
+    ue.ready(function() {
+	    //设置编辑器的内容
+	    ue.setContent('{$data.details}');
+	});
+    //初始化图片上传插件
+    imgUpload({
+   		inputId:'file', //input框id
+        imgBox:'imgBox', //图片容器id
+   	});
+</script>
 {/block}
