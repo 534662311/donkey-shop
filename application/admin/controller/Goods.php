@@ -6,6 +6,7 @@ use think\Controller;
 use think\Request;
 use think\Loader;
 use app\common\model\Goods as GoodsModel;
+use app\common\model\Category;
 
 class Goods extends Controller
 {
@@ -69,6 +70,10 @@ class Goods extends Controller
                 $this->error('新增失败！');
             }
         }
+        //获取分类
+        $cate = new Category();
+        $list = $cate->getTreeData();
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
@@ -86,7 +91,11 @@ class Goods extends Controller
         $data = GoodsModel::get($id);
         //取出图片
         $files = explode('|', $data->atlas);
+        //获取分类
+        $cate = new Category();
+        $list = $cate->getTreeData();
 
+        $this->assign('list', $list);
         $this->assign('data', $data);
         $this->assign('files', $files);
         return view();
@@ -128,13 +137,14 @@ class Goods extends Controller
                         array_push($atlasArr, 'uploads/'.$info->getSaveName());
                     }
                 }
+                $goods->atlas = implode('|',$atlasArr);
             }
-            $goods->atlas = implode('|',$atlasArr);
             $goods->gname = input('post.gname');
             $goods->gprice  = input('post.gprice');
             $goods->mprice  = input('post.mprice');
             $goods->details = input('post.details');
             $goods->description = input('post.description');
+            $goods->pid = input('post.pid');
             if($goods->save()){
                 $this->success('更新成功！', 'admin/goods/index');
             }else{
