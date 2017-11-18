@@ -6,6 +6,7 @@ use think\Controller;
 use think\Request;
 use think\Session;
 use app\common\model\User as UserModel;
+use app\common\model\Order;
 
 class User extends Controller
 {
@@ -17,7 +18,9 @@ class User extends Controller
     public function index()
     {
         $this->assign('user', 'idx');
-       return $this->fetch();
+        $data = UserModel::all();
+        $this->assign('data', $data);
+        return $this->fetch();
     }
 
     /**
@@ -93,6 +96,13 @@ class User extends Controller
      */
     public function delete($id)
     {
-        //
+        if(Order::get($id)){
+            $this->error('此用户购买过商品，不建议删除', 'admin/User/index');
+        }
+        if(UserModel::destroy($id)){
+            $this->success('删除用户成功！');
+        }else{
+            $this->error('删除失败！');
+        }
     }
 }
