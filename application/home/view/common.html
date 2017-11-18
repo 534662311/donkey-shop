@@ -9,17 +9,66 @@
 	<script src="base_url/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class='top-header'>
-		{notempty name="$Think.session.user_name"}
-			<a href='/user.html'>{$Think.session.user_name} </a>
-			 |
-			<a href='/logout.html'> 退出登陆 </a>
-		{else /}
-			<a href='/login.html'>登陆 </a>
-			 |
-			<a href='/register.html'> 注册 </a>
-		{/notempty}
+	<div class="page-header">
+		<div class='container'>
+			<div class='pull-left'>
+				<ul class="nav nav-pills">
+					<li role="presentation" class='dropdown'>
+						<a href="base_url{:url('home/User/index')}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							商品分类
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							{foreach $cate as $v}
+							<li>
+								<a href="base_url{:url('home/User/changePassword')}">
+									{$v.catname}
+								</a>
+							</li>
+							{/foreach}
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div class='pull-right'>
+				{notempty name='$Think.session.user_id'}
+				<ul class="nav nav-pillst">
+					<li role="presentation" class='dropdown'>
+						<a href="base_url{:url('home/User/index')}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							{$Think.session.user_name} 
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="base_url{:url('home/User/changePassword')}">
+									修改密码
+								</a>
+							</li>
+							<li>
+								<a href="/register.html">
+									注册
+								</a>
+							</li>
+							<li role="separator" class="divider"></li>
+							<li><a href="base_url{:url('home/User/logout')}">退出登陆</a></li>
+						</ul>
+					</li>
+				</ul>
+				{else /}
+				<ul class="nav nav-pills">
+					<li role="presentation">
+						<a href="/login.html">登陆 </a>
+					</li>
+					<li>
+						<a href="/register.html"> 注册</a>
+					</li>
+				</ul>
+				{/notempty}
+			</div>
+		</div>
 	</div>
-	{block name='content'}{/block}
+	<div class='container'>
+		{block name='content'}{/block}
+	</div>
 </body>
 </html>

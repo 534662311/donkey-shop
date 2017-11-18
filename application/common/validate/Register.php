@@ -3,7 +3,7 @@ namespace app\common\validate;
 
 use think\Validate;
 
-class User extends Validate{
+class Register extends Validate{
 	protected $rule = [
 		'password' => 'require|confirm:confirm_password|length:6,16',
 		'phone' => 'require|number|length:11',

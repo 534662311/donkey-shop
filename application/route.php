@@ -30,7 +30,7 @@ Route::group(['ext'=>'html'],function(){
 // 前台路由组
 Route::group(['ext'=>'html'],function(){
     // 商品分类路由
-   Route::rule('category/:cid','home/Entry/category');
+   Route::rule('category/:cid','home/Index/category');
    // 商品详情页
    Route::rule('goods/:gid','home/Product/goods');
    // 购物车
