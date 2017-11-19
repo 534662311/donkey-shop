@@ -9,7 +9,9 @@ use think\Session;
 class User extends Model
 {
 	protected $pk = 'uid';
-
+    // 开启自动写入时间戳字段
+	protected $autoWriteTimestamp = 'datetime';
+	
 	protected $insert = ['is_admin' => 0];
 	//用户登录
 	public function login($data){

@@ -1,107 +1,155 @@
 {extend name='common'}
 {block name='content'}
 {include file='goods/header'}
-	<div class="panel panel-default mt20">
-	  <div class="panel-heading">
-	    <h3 class="panel-title">添加商品</h3>
-	  </div>
-	  <div class="panel-body">
-	    <form action="" method='post' enctype="multipart/form-data">
-			<div class="form-group">
-			    <label>商品名称</label>
-			    <input name="gname" type="text" class="form-control" placeholder="商品名称">
-		  	</div>
-			<div class="form-group">
-			    <label>商品分类</label>
-			    <select name="pid" class="form-control">
-					<option value="0">顶级分类</option>
-					{foreach $list as $v}
-					<option value="$v.cid">{$v._catname}</option>
-					{/foreach}
-				</select>
-		  	</div>
-			<div class="form-group mt20">
-			    <label>商城价格</label>
-			    <input name="gprice" type="text" class="form-control" placeholder="商城价格">
-		  	</div>
-			<div class="form-group mt20">
-			    <label>市场价格</label>
-			    <input name="mprice" type="text" class="form-control" placeholder="市场价格">
-		  	</div>
-			<div class="form-group mt20">
-			    <label>商品封面</label>
-			    <div class='upload-img'>
-			       	<div id="inputBox">
-			       		<input type="file" name='cover' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-				   	</div>
-				   <!--展示图片-->
-				   <div class="imgBox"></div>
-			   	</div>
-		  	</div>
-			<div class="form-group mt20">
-			    <label>商品图集</label>
-			    <div class='img-list'>
-				    <div class='upload-img'>
-				       	<div id="inputBox">
-				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-					   	</div>
-					   <!--展示图片-->
-					   <div class="imgBox"></div>
-				   	</div>
-				    <div class='upload-img'>
-				       	<div id="inputBox">
-				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-					   	</div>
-					   <!--展示图片-->
-					   <div class="imgBox"></div>
-				   	</div>
-				    <div class='upload-img'>
-				       	<div id="inputBox">
-				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-					   	</div>
-					   <!--展示图片-->
-					   <div class="imgBox"></div>
-				   	</div>
-				    <div class='upload-img'>
-				       	<div id="inputBox">
-				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-					   	</div>
-					   <!--展示图片-->
-					   <div class="imgBox"></div>
-				   	</div>
-				    <div class='upload-img'>
-				       	<div id="inputBox">
-				       		<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-					   	</div>
-					   <!--展示图片-->
-					   <div class="imgBox"></div>
-				   	</div>
-			   	</div>
-		  	</div>
-			<div class="form-group mt20">
-			    <label>商品描述</label>
-			    <input name="description" type="text" class="form-control" placeholder="商品描述">
-		  	</div>
-			<div class="form-group mt20">
-			    <label>商品详情</label>
-				<script id="container" name="details" type="text/plain"></script>
-		  	</div>
-		  	<div class="form-group mt20">
-				<button type='submit' class='btn btn-default'>提交</button>
-		  	</div>
-	    </form>
-	  </div>
+<div class="panel panel-default mt20">
+	<div class="panel-heading">
+	<h3 class="panel-title">添加商品</h3>
 	</div>
+	<div class="panel-body">
+	<form action="" method='post' enctype="multipart/form-data">
+		<div class="form-group">
+			<label>商品名称</label>
+			<input name="gname" type="text" class="form-control" placeholder="商品名称">
+		</div>
+		<div class="form-group">
+			<label>商品分类</label>
+			<select name="pid" class="form-control">
+				<option value="0">顶级分类</option>
+				{foreach $list as $v}
+				<option value="$v.cid">{$v._catname}</option>
+				{/foreach}
+			</select>
+		</div>
+		<div class="form-group mt20">
+			<label>商城价格</label>
+			<input name="gprice" type="text" class="form-control" placeholder="商城价格">
+		</div>
+		<div class="form-group mt20">
+			<label>市场价格</label>
+			<input name="mprice" type="text" class="form-control" placeholder="市场价格">
+		</div>
+		<div class="form-group mt20">
+			<label>商品封面</label>
+			<div class='upload-img'>
+				<div id="inputBox">
+					<input type="file" name='cover' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+				</div>
+				<!--展示图片-->
+				<div class="imgBox"></div>
+			</div>
+		</div>
+		<div class="form-group mt20">
+			<label>商品图集</label>
+			<div class='img-list'>
+				<div class='upload-img'>
+					<div id="inputBox">
+						<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					</div>
+					<!--展示图片-->
+					<div class="imgBox"></div>
+				</div>
+				<div class='upload-img'>
+					<div id="inputBox">
+						<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					</div>
+					<!--展示图片-->
+					<div class="imgBox"></div>
+				</div>
+				<div class='upload-img'>
+					<div id="inputBox">
+						<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					</div>
+					<!--展示图片-->
+					<div class="imgBox"></div>
+				</div>
+				<div class='upload-img'>
+					<div id="inputBox">
+						<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					</div>
+					<!--展示图片-->
+					<div class="imgBox"></div>
+				</div>
+				<div class='upload-img'>
+					<div id="inputBox">
+						<input type="file" name='atlas[]' class="file" accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
+					</div>
+					<!--展示图片-->
+					<div class="imgBox"></div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group mt20">
+			<label>商品描述</label>
+			<input name="description" type="text" class="form-control" placeholder="商品描述">
+		</div>
+		<div class="form-group mt20">
+			<label>商品详情</label>
+			<script id="container" name="details" type="text/plain"></script>
+		</div>
+		<div class="panel panel-default mt20">
+			<div class="panel-body">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="form-group mt20">
+							<label>商品款式</label>
+							<input name="sname[]" type="text" class="form-control" placeholder="商品描述">
+						</div>
+						<div class="form-group mt20">
+							<label>款式数量</label>
+							<input name="snum[]" type="number" class="form-control" placeholder="商品描述">
+						</div>
+						<div class="form-group mt20">
+							<a href='javascript:' class='btn btn-danger delete-sub'>删除</a>
+						</div>
+					</div>
+				</div>
+				<a href='javascript:' class='btn btn-info add-sub'>增加</a>
+			</div>
+		</div>
+		<div class="form-group mt20">
+			<button type='submit' class='btn btn-default'>提交</button>
+		</div>
+	</form>
+	</div>
+</div>
+<div class='off sub-template'>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group mt20">
+				<label>商品款式</label>
+				<input name="sname[]" type="text" class="form-control" placeholder="商品描述">
+			</div>
+			<div class="form-group mt20">
+				<label>商品数量</label>
+				<input name="snum[]" type="number" class="form-control" placeholder="商品描述">
+			</div>
+			<div class="form-group mt20">
+				<a href='javascript:' class='btn btn-danger delete-sub'>删除</a>
+			</div>
+		</div>
+	</div>
+</div>
 {js href='base_url/static/ueditor/ueditor.config.js'}
 {js href='base_url/static/ueditor/ueditor.all.js'}
 {js href='base_url/static/js/upload.js'}
 <script type="text/javascript">
-	//初始化百度编辑框
-    var ue = UE.getEditor('container');
-    //初始化图片上传插件
-    imgUpload({
-   		inputId:'file', //input框id
-        imgBox:'imgBox', //图片容器id
-   	});
+ 
+	$(function(){
+		//初始化百度编辑框
+		var ue = UE.getEditor('container');
+    	//初始化图片上传插件
+		imgUpload({
+			inputId:'file', //input框id
+			imgBox:'imgBox', //图片容器id
+		});
+		//删除商品属性
+		$(document).on('click', '.delete-sub', function(){
+			$(this).closest('.panel').remove();
+		});
+		//增加商品属性
+		$(document).on('click', '.add-sub', function(){
+			$(this).before($('.sub-template').children('.panel').clone(true));
+		});
+	});
 </script>
 {/block}

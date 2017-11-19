@@ -21,15 +21,17 @@
 		  <input type="text" name='catname' value='{$data.catname}' class="form-control" placeholder="栏目名称" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group mt20">
-			<div id="inputBox">
-			 	<input type="file" id="file" name='thumb' accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
-		 	</div>
-		    <div id="imgBox">
-				<div class="imgContainer">
-					<img alt='{$data.catname}' src='base_url/{$data.thumb}' onclick="imgDisplay(this)">
-					<p onclick="removeImg(this)" class="imgDelete">删除</p>
+			<div class='upload-img'>
+				<div id="inputBox">
+					<input type="file" class="file" name='thumb' accept="image/png,image/jpg,image/gif,image/JPEG"/>点击选择图片
 				</div>
-		    </div>
+				<div class="imgBox">
+					<div class="imgContainer">
+							<img alt='{$data.catname}' src='base_url/{$data.thumb}' onclick="imgDisplay(this)">
+							<p onclick="removeImg(this)" class="imgDelete">删除</p>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="input-group mt20">
 		  <span class="input-group-addon" id="basic-addon1">栏目排序</span>

@@ -8,7 +8,9 @@ use think\Loader;
 
 class Category extends Model
 {
-    protected $pk = 'cid';
+	protected $pk = 'cid';    
+	// 开启自动写入时间戳字段
+    protected $autoWriteTimestamp = 'datetime';
     //获取树形结果集
     public function getTreeData(){
     	$data = $this::all();
@@ -34,12 +36,8 @@ class Category extends Model
 		$this->save();
     	return ['code'=>1, 'msg'=>'保存成功！'];
     }
-    //更新
-    public function updateCate($data){
-
-    }
-    //删除
-    public function delete(){
-
+    //关联商品
+    public function goods(){
+		return $this->hasMany('Goods', 'pid');
     }
 }

@@ -1,0 +1,50 @@
+{extend name='common'}
+{block name='content'}
+<div class="row">
+    <div class="col-md-3">
+        <div class="thumbnail">
+            <img src="base_url/{$good.cover}" alt="{$good.gname}">
+        </div>
+    </div>
+    <div class='col-md-9'>
+        <p>{$good.gname}</p>
+        <p></p>{$good.description}</p>
+        <p>{$good.gprice}元</p>
+        <p>
+            数量：<input type="text" value='0' name='num'>
+        </p>
+        <p class='style'>
+            款式：
+            {foreach $subgoods as $sub}
+            <span class='style-box'>
+                <strong class='btn btn-default'>{$sub.sname}</strong>
+                <i class='num off'>{$sub.snum}</i>
+            </span>
+            {/foreach}
+        </p>
+        <p class='stock'>库存：<span class='num'>{$stock}</span>件</p>
+        <div class='opera'>
+            <button class='btn btn-success'>立即购买</button>
+            <button class='btn btn-danger'>加入购物车</button>
+        </div>
+    </div>
+</div>
+<div class='panel panel-default'>
+    <div class='panel-heading'>
+        <h4>商品详情</h4>
+    </div>
+    <div class='panel-body'>
+        <div class='details'>{$good.details}</div>
+    </div>
+</div>
+<script type='text/javascript'>
+    $(function(){
+        $(document).on('click', '.style .btn', function(){
+            $(this).removeClass('btn-default').addClass('btn-success');
+            $(this).parent('.style-box').siblings().children('.btn').removeClass('btn-success').addClass('btn-default');
+            var num = $(this).next('.num').text();
+            $('.stock .num').text(num);
+        });
+    });
+</script>
+{/block}

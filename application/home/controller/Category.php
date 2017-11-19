@@ -4,17 +4,26 @@ namespace app\home\controller;
 
 use think\Controller;
 use think\Request;
+use app\common\model\Category as CateModel;
+use app\common\model\Goods;
 
-class Product extends Controller
+class Category extends Controller
 {
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index()
+    public function index($cid)
     {
-        //
+        //取出顶级分类
+        $cate = CateModel::get($cid);
+        //取出改分类下的所有子分类
+        $subCate = CateModel::all(['pid'=>$cid]);
+        //取出子分类下的所有商品
+
+
+        return view();
     }
 
     /**

@@ -14,7 +14,8 @@ class Index extends Controller
         $indexCate = Category::where(['iscover'=>1])->column('cid');
         //取出首页分类下的所有商品
         
-        $goods = Goods::where('pid', 'in', $indexCate)->find();
+        $goods = Goods::where('pid', 'in', $indexCate)->select();
+        
         return view('', ['goods'=>$goods, 'cate'=>$cate]);
     }
 }

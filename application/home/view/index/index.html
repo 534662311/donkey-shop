@@ -6,11 +6,14 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
+			{foreach $goods as $good}
 			<div class="col-md-3">
-				<a href="#" class="thumbnail">
-					<img src="..." alt="...">
+				<a href="/details/{$good.gid}.html" class="thumbnail">
+					<img src="base_url/{$good.cover}" alt="{$good.gname}">
+					<p class='mt20'>{$good.gname}</p>
 				</a>
 			</div>
+			{/foreach}
 		</div>
 	</div>
 </div>

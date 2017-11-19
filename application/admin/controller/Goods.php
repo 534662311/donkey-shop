@@ -33,12 +33,14 @@ class Goods extends Controller
     {
         //激活列表标签状态
         $this->assign('goods', 'add');
+
         $goods = new GoodsModel();
         if(request()->isPost()){
             $validate = Loader::validate('Goods');
             if(!$validate->check(input('post.'))){
                 $this->error($validate->getError());
             }
+            //获取封面图
             $cover = request()->file('cover');
             if($cover){
                 $re = $cover->move(ROOT_PATH.'public/uploads');
@@ -48,6 +50,7 @@ class Goods extends Controller
                     $this->error($cover->getError());
                 }
             }
+            //获取多张图集
             $atlas = request()->file('atlas');
             if($atlas){
                 $atlasArr = array();
@@ -55,26 +58,42 @@ class Goods extends Controller
                     $info = $atla->move(ROOT_PATH.'public/uploads');
                     if($info){
                         array_push($atlasArr, 'uploads/'.$info->getSaveName());
+                    }else{
+                        $this->error($info->getError());
                     }
                 }
+                $goods->atlas = implode('|',$atlasArr);
             }
-            $goods->atlas = implode('|',$atlasArr);
             $goods->gname = input('post.gname');
             $goods->gprice  = input('post.gprice');
             $goods->mprice  = input('post.mprice');
             $goods->details = input('post.details');
             $goods->description = input('post.description');
             if($goods->save()){
+                //保存关联属性
+                $subArr = array();
+                $sname = input('post.')['sname'];
+                $snum = input('post.')['snum'];
+                for($i=0; $i<count($sname); $i++){
+                    $subArr[$i]['sname'] = $sname[$i];
+                    $subArr[$i]['snum'] = $snum[$i];
+                }
+                foreach($subArr as $v){
+                    $goods->subgoods()->save([
+                       'sname' => $v['sname'],
+                       'snum' => $v['snum'],
+                   ]);
+                }
                 $this->success('新增成功！', 'admin/goods/index');
             }else{
                 $this->error('新增失败！');
             }
         }
+        
         //获取分类
         $cate = new Category();
         $list = $cate->getTreeData();
-        $this->assign('list', $list);
-        return $this->fetch();
+        return view('', ['list'=>$list]);
     }
 
     /**
@@ -85,20 +104,21 @@ class Goods extends Controller
      */
     public function edit($id)
     {       
-        //激活列表标签状态
-        $this->assign('goods', 'add');
-
         $data = GoodsModel::get($id);
         //取出图片
         $files = explode('|', $data->atlas);
         //获取分类
         $cate = new Category();
         $list = $cate->getTreeData();
-
-        $this->assign('list', $list);
-        $this->assign('data', $data);
-        $this->assign('files', $files);
-        return view();
+        //获取商品属性
+        $subs = $data->subgoods;
+        return view('', [
+            'list'=>$list,
+            'data'=>$data,
+            'files'=>$files,
+            'goods'=>'add',
+            'subs'=>$subs,
+        ]);
     }
     //更新
     public function update($id){
@@ -108,6 +128,7 @@ class Goods extends Controller
             if(!$validate->check(input('post.'))){
                 $this->error($validate->getError());
             }
+            //获取商品封面图
             $cover = request()->file('cover');
             if($cover){
                 //删除旧图片
@@ -121,15 +142,15 @@ class Goods extends Controller
                     $this->error($cover->getError());
                 }
             }
+            //获取商品图集
             $atlas = request()->file('atlas');
             if($atlas){
                 //删除旧图片
-                $files = explode('|', $data->atlas);
+                $files = explode('|', $goods->atlas);
                 foreach ($files as $v) {
                     $oldImg = ROOT_PATH.'public/'.$v;
                     unlink($oldImg);
                 }
-                
                 $atlasArr = array();
                 foreach($atlas as $atla){
                     $info = $atla->move(ROOT_PATH.'public/uploads');
@@ -146,6 +167,22 @@ class Goods extends Controller
             $goods->description = input('post.description');
             $goods->pid = input('post.pid');
             if($goods->save()){
+                 //更新关联属性
+                 $subArr = array();
+                 $sname = input('post.')['sname'];
+                 $snum = input('post.')['snum'];
+                 for($i=0; $i<count($sname); $i++){
+                    $subArr[$i]['sname'] = $sname[$i];
+                    $subArr[$i]['snum'] = $snum[$i];
+                 }
+                 //先删除再增加
+                 $goods->subgoods()->delete();
+                 foreach($subArr as $v){
+                    $goods->subgoods()->save([
+                        'sname' => $v['sname'],
+                        'snum' => $v['snum'],
+                    ]);
+                 }
                 $this->success('更新成功！', 'admin/goods/index');
             }else{
                 $this->error('更新失败！');
@@ -160,7 +197,20 @@ class Goods extends Controller
      */
     public function delete($id)
     {
+        //删除旧图片
+        $good = GoodsModel::get($id);
+        $files = explode('|', $good->atlas);
+        $cover = $good->cover;
+        foreach ($files as $v) {
+            $oldImg = ROOT_PATH.'public/'.$v;
+            unlink($oldImg);
+        }
+        //删除旧封面
+        $oldCover = ROOT_PATH.'public/'.$cover;
+        unlink($oldCover);
+        
         if(GoodsModel::destroy($id)){
+           
             $this->success('删除成功！');
         }
     }
