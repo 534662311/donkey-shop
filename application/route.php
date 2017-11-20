@@ -34,7 +34,7 @@ Route::group(['ext'=>'html'],function(){
    // 商品详情页
    Route::rule('details/:gid','home/Details/index');
    // 购物车
-   Route::rule('cart','home/Cart/goodList');
+   Route::rule('cart','home/Cart/index');
    // 商品结算
    Route::rule('flow','home/Flow/index');
 });

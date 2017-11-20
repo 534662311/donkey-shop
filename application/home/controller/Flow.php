@@ -4,6 +4,7 @@ namespace app\home\controller;
 
 use think\Controller;
 use think\Request;
+use app\common\model\Category;
 
 class Flow extends Controller
 {
@@ -14,7 +15,11 @@ class Flow extends Controller
      */
     public function index()
     {
-        //
+        //取出顶级分类
+        $cate = Category::all(['pid'=>0]);
+        return view('', [
+            'cate'=>$cate,
+        ]);
     }
 
     /**

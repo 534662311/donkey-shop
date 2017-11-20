@@ -10,7 +10,12 @@
 </head>
 <body>
 	<div class="page-header">
-		<div class='container'>
+		<div class='container clearfix'>
+			<div class='index-nav pull-left'>
+				<a href="base_url">
+					<img width="50" src="base_url/static/images/donkey.jpg" alt="大毛驴首页" class="img-circle">
+				</a>
+			</div>
 			{notempty name='$Think.session.user_id'}
 			<ul class="nav nav-pills pull-right">
 				<li role="presentation" class='dropdown'>

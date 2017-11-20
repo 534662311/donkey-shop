@@ -1,0 +1,52 @@
+{extend name='common'}
+{block name='content'}
+<table class='table'>
+    <thead>
+        <tr>
+            <th>商品信息</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>库存</th>
+            <th>小计</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class='clearfix'>
+                <a href="#" class="thumbnail pull-left">
+                    <img width='50' src="base_url/static/images/donkey.jpg" alt="...">
+                </a>
+                <div class='pull-left col-md-offset-1'>
+                    <p>华为mate10</p>
+                    <p>款式：黑色</p>
+                </div>
+            </td>
+            <td>￥4400.00</td>
+            <td class='clearfix'>
+                <a href="javascript:" class='add-num btn btn-default pull-left'>+</a>
+                <input type="text" name='goods_num' value='1' class='form-control pull-left' style='width: auto;'>
+                <a href="javascript:" class='sub-num btn btn-default pull-left'>+</a>
+            </td>
+            <td>55</td>
+            <td>小计：4400.00</td>
+            <td>
+                <a href="javascript:">
+                    <i class='glyphicon glyphicon-trash'></i>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7"></td>
+        </tr>
+    </tbody>
+</table>
+<div class='clearfix row'>
+    <a href="base_url" class='pull-left col-md-4'>< 继续购物</a>
+    <div class='pull-right col-md-8 text-right'>
+        <span>共1件商品</span>
+        <span class='col-md-offset-1'>合计：￥4444.00</span>
+        <a href="/flow.html" class='btn btn-danger col-md-offset-1'>去结账</a>
+    </div>
+</div>
+{/block}
