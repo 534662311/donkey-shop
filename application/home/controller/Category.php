@@ -17,13 +17,30 @@ class Category extends Controller
     public function index($cid)
     {
         //取出顶级分类
-        $cate = CateModel::get($cid);
-        //取出改分类下的所有子分类
+        $cate = CateModel::all(['pid'=>0]);
+        //取出该分类下的所有子分类
         $subCate = CateModel::all(['pid'=>$cid]);
-        //取出子分类下的所有商品
+        //取出当前分类
+        $current = CateModel::get($cid);
 
-
-        return view();
+        if($current->pid !== 0 && !$subCate){
+            //子分类，取出该分类下的商品
+            $goods = $current->goods;
+            $pid = CateModel::where('cid', $cid)->value('pid');
+            $subCate = CateModel::all(['pid'=>$pid]);
+        }else{
+            //全部分类，取出所有商品
+            //取出子分类的cid
+            $subCid = CateModel::where('pid', $cid)->column('cid');
+            //取出商品
+            $goods = Goods::where('pid', 'in', $subCid)->select();
+        }
+        return view('', [
+            'cate'=>$cate,
+            'subCate'=>$subCate,
+            'cid'=>$cid,
+            'goods'=>$goods,
+        ]);
     }
 
     /**

@@ -1,4 +1,30 @@
 {extend name='common'}
-{block}
-    分类页
+{block name='content'}
+<ul class="nav nav-pills">
+    <li role="presentation" class="active">
+        <a href="/category/{$cid}.html">全部</a>
+    </li>
+    {foreach $subCate as $v}
+    <li role="presentation">
+        <a href="/category/{$v.cid}.html">{$v.catname}</a>
+    </li>
+    {/foreach}
+</ul>
+<div class="panel panel-default mt20">
+    <div class="panel-heading">
+        <h3 class="panel-title">商品列表</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            {foreach $goods as $good}
+            <div class="col-md-3">
+                <a href="/details/{$good.gid}.html" class="thumbnail">
+                    <img src="base_url/{$good.cover}" alt="{$good.gname}">
+                    <p class='mt20'>{$good.gname}</p>
+                </a>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
 {/block}
