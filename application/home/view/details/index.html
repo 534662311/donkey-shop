@@ -90,9 +90,31 @@
                 contentType: 'application/json',
                 dataType: "json",
                 success: function(res){
-                    console.log(res);
+                    let fragment = $('<div></div>'); 
+                    $.each(res, function(i, v){
+                        let temp = `
+                        <ul class='good'>
+                            <li class="clearfix mt10">
+                                <span class='pull-left'>${v.name}</span>
+                                <span class='pull-right'>x ${v.num}</span>
+                            </li>
+                            <li class="clearfix mt10">
+                                <span class='pull-left'>款式：${v.options[0]['color']}</span>
+                                <span class='pull-right'>价格：${v.price}</span>
+                            </li>
+                            <li class="text-right mt10">
+                                <a href="javascript:" onclick='deleteCart("${i}")' class='btn btn-danger delete-cart'>删除</a>
+                            </li>
+                            <li class="text-right mt10">
+                                <a href="/cart.html">去购物车结算</a>
+                            </li>
+                        </ul>`;
+                        fragment.append(temp);
+                    });
+                    $('.cart-list').html(fragment.html());
+                    alert('添加购物车成功');
                 }
-            })
+            });
         });
     });
 </script>

@@ -92,8 +92,13 @@ class Cart extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function delete($id)
+    public function delete()
     {
-        //
+        if(request()->isDelete()){
+            $cart = new CartHandle();
+            $cart->del(input('id'));
+            $goods = $this->create();
+            return $goods; 
+        }
     }
 }
