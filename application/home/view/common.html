@@ -79,23 +79,29 @@
 						<div class="modal-content">
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h3 class="panel-title">商品列表</h3>
+									<h3 class="panel-title">已添加商品</h3>
 								</div>
 								<div class='panel-body'>
-									<li class="clearfix mt10">
-										<span class='pull-left'>华为mate10</span>
-										<span class='pull-right'>x 1</span>
-									</li>
-									<li class="clearfix mt10">
-										<span class='pull-left'>款式：红色</span>
-										<span class='pull-right'>价格：3555.00</span>
-									</li>
-									<li class="text-right mt10">
-										<a href="javascript:" class='btn btn-danger delete-cart'>删除</a>
-									</li>
-									<li class="text-right mt10">
-										<a href="/cart.html">去购物车结算</a>
-									</li>
+									{notempty name='$Think.session.cart.goods'}
+									{foreach $Think.session.cart.goods as $v}
+									<ul class='good'>
+										<li class="clearfix mt10">
+											<span class='pull-left'>{$v.name}</span>
+											<span class='pull-right'>x {$v.num}</span>
+										</li>
+										<li class="clearfix mt10">
+											<span class='pull-left'>款式：{$v.options[0]['color']}</span>
+											<span class='pull-right'>价格：{$v.price}</span>
+										</li>
+										<li class="text-right mt10">
+											<a href="javascript:" class='btn btn-danger delete-cart'>删除</a>
+										</li>
+										<li class="text-right mt10">
+											<a href="/cart.html">去购物车结算</a>
+										</li>
+									</ul>
+									{/foreach}
+									{/notempty}
 								</div>
 							</div>
 						</div>

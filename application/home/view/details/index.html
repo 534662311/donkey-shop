@@ -6,27 +6,34 @@
             <img src="base_url/{$good.cover}" alt="{$good.gname}">
         </div>
     </div>
-    <div class='col-md-9'>
-        <p>{$good.gname}</p>
-        <p></p>{$good.description}</p>
-        <p>{$good.gprice}元</p>
+    <div class='info col-md-9'>
+        <h3>{$good.gname}</h3>
+        <p>{$good.description}</p>
+        <p>商城价：{$good.gprice}元</p>
         <p>
-            数量：<input type="text" value='0' name='num'>
+            数量：<input type="text" value='1' class='form-control goods-num'>
         </p>
         <p class='style'>
             款式：
             {foreach $subgoods as $sub}
             <span class='style-box'>
                 <strong class='btn btn-default'>{$sub.sname}</strong>
-                <i class='num off'>{$sub.snum}</i>
+                <i class='stock-num off'>{$sub.snum}</i>
             </span>
             {/foreach}
         </p>
-        <p class='stock'>库存：<span class='num'>{$stock}</span>件</p>
+        <p class='stock'>库存：<span class='stock-num'>{$stock}</span>件</p>
         <div class='opera'>
-            <a href='/cart.html' class='btn btn-success'>立即购买</a>
-            <button class='btn btn-danger'>加入购物车</button>
+            <button class='btn btn-success btn-buy'>立即购买</button>
+            <button class='btn btn-danger col-md-offset-1 btn-add'>加入购物车</button>
         </div>
+        <form class='order-info' action="{:url('home/Order/add')}" method='post'>
+            <input type="hidden" name="id" value="{$good.gid}">
+            <input type="hidden" name="name" value="{$good.gname}">
+            <input type="hidden" name="price" value="{$good.gprice}">
+            <input type="hidden" name="num" value="1">
+            <input type="hidden" class="style-color" name="options[color]" value="">
+        </form>
     </div>
 </div>
 <div class='panel panel-default mt20'>
@@ -39,11 +46,53 @@
 </div>
 <script type='text/javascript'>
     $(function(){
+        //选择款式和显示款式库存
         $(document).on('click', '.style .btn', function(){
-            $(this).removeClass('btn-default').addClass('btn-success');
-            $(this).parent('.style-box').siblings().children('.btn').removeClass('btn-success').addClass('btn-default');
-            var num = $(this).next('.num').text();
-            $('.stock .num').text(num);
+            $(this).removeClass('btn-default').addClass('btn-warning');
+            $(this).parent('.style-box').siblings().children('.btn').removeClass('btn-warning').addClass('btn-default');
+            //改变库存
+            var num = $(this).next('.stock-num').text();
+            $('.stock .stock-num').text(num);
+            //改变隐藏域款式
+            $('.order-info .style-color').val($(this).text());
+        });
+        //选择数量
+        $('.info .goods-num').on('input', function(){
+            $('.order-info input[name=num]').val($(this).val());
+        });
+        //提交表单
+        $(document).on('click', '.btn-buy', function(){
+            if(!$('.style-color').val()){
+                alert('请选择款式！');
+                return;
+            }
+            $('.order-info').submit();
+        });
+        //加入购物车
+        $(document).on('click', '.btn-add', function(){
+            var style = $('.order-info .style-color').val();
+            if(!style){
+                alert('请选择款式！');
+                return;
+            }
+            var data = {
+                'id': '{$good.gid}',
+                'name': '{$good.gname}',
+                'num': $('.order-info input[name=num]').val(),
+                'price': '{$good.gprice}',
+                'options': [{color: style}],
+            };
+            data = JSON.stringify(data);
+            $.ajax({
+                url: '/cart',
+                data: data,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: "json",
+                success: function(res){
+                    console.log(res);
+                }
+            })
         });
     });
 </script>

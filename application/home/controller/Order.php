@@ -4,9 +4,12 @@ namespace app\home\controller;
 
 use think\Controller;
 use think\Request;
+use think\Session;
 use app\common\model\Category;
+use app\common\model\Goods;
+use app\common\cart\Cart;
 
-class Cart extends Controller
+class Order extends Controller
 {
     /**
      * 显示资源列表
@@ -17,8 +20,21 @@ class Cart extends Controller
     {
         //取出顶级分类
         $cate = Category::all(['pid'=>0]);
+        //取出购物车数据
+        $cart = session('cart');
+        //取出商品数据
+        $goods = $cart['goods'];
+        if(!is_null($goods)){
+            foreach($goods as $k=>$good){
+                $cover = Goods::get($good['id'])->cover;
+                $goods[$k]['cover'] = $cover;
+            }
+        }
+        
         return view('', [
             'cate'=>$cate,
+            'goods'=>$goods,
+            'cart'=>$cart,
         ]);
     }
 
@@ -27,9 +43,13 @@ class Cart extends Controller
      *
      * @return \think\Response
      */
-    public function create()
+    public function add()
     {
-        //
+        if(request()->isPost()){
+            $cart = new Cart();
+            $cart->add(input('post.'));
+        }
+        $this->redirect('/order.html');
     }
 
     /**

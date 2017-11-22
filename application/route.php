@@ -34,13 +34,14 @@ Route::group(['ext'=>'html'],function(){
    // 商品详情页
    Route::rule('details/:gid','home/Details/index');
    // 购物车
-   Route::rule('cart','home/Cart/index');
+   Route::rule('order','home/Order/index');
    // 商品结算
    Route::rule('flow','home/Flow/index');
 });
 //后台路由
 Route::rule('admin$','admin/Index/index');
-
+//api路由
+Route::resource('cart', 'api/Cart');
 return [
     '__pattern__' => [
         'name' => '\w+',

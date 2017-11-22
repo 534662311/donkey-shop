@@ -1,39 +1,39 @@
 <?php
 
-namespace app\home\controller;
+namespace app\api\controller;
 
 use think\Controller;
 use think\Request;
 use think\Session;
+use app\common\cart\Cart as CartHandle;
 use app\common\model\Goods;
-use app\common\model\SubGoods;
-use app\common\model\Category;
 
-class Details extends Controller
+class Cart extends Controller
 {
     /**
      * 显示资源列表
      *
      * @return \think\Response
      */
-    public function index($gid)
+    public function index()
     {
-        $good = Goods::get($gid);
-        //取出商品款式
-        $subgoods = $good->subgoods;
-        //取出顶级分类
-        $cate = Category::all(['pid'=>0]);
-        //计算总库存
-        $stock = 0;
-        foreach($subgoods as $v){
-            $stock += $v['snum'];
+        
+    }
+
+    /**
+     * 显示创建资源表单页.
+     *
+     * @return \think\Response
+     */
+    public function create()
+    {
+        $goods = session('cart.goods');
+        if(!is_null($goods)){
+            foreach($goods as $k=>$v){
+                $goods[$k]['cover'] = Goods::where('gid', $v['id'])->value('cover');
+            }
         }
-        return view('', [
-            'good'=>$good, 
-            'subgoods'=>$subgoods, 
-            'cate'=>$cate,
-            'stock'=>$stock,
-        ]);
+        return json($goods);
     }
 
     /**
@@ -44,7 +44,12 @@ class Details extends Controller
      */
     public function save(Request $request)
     {
-        //
+        if(request()->isPost()){
+            $cart = new CartHandle();
+            $cart->add(input('post.'));
+            $goods = $this->create();
+            return $goods;
+        }
     }
 
     /**
