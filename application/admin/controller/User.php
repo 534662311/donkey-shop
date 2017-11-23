@@ -51,7 +51,7 @@ class User extends Controller
                 $this->error($re['msg']);
             }
         }
-        return $this->fetch();
+        return view();
     }
 
     /**

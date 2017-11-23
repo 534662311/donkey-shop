@@ -40,7 +40,7 @@ Route::group(['ext'=>'html'],function(){
 });
 //后台路由
 Route::rule('admin$','admin/Index/index');
-//api路由
+//购物车api路由
 Route::resource('cart', 'api/Cart');
 return [
     '__pattern__' => [

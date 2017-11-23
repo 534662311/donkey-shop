@@ -35,9 +35,9 @@ class User extends Model
 			return ['valid'=>0, 'msg'=>'密码错误'];
 		}
 
-		session('user_name', $info['username']);
-		session('user_id', $info['uid']);
-		session('user_sign',md5($userSign));
+		session('user.user_name', $info['username']);
+		session('user.user_id', $info['uid']);
+		session('user.user_sign',md5($userSign));
 
 		return ['valid'=>1, 'msg'=>'登陆成功'];
 	}
@@ -66,7 +66,7 @@ class User extends Model
     	if(!$validate->check($data)){
     		return ['code'=>0, 'msg'=>$validate->getError()];
     	}
-    	$user = $this::get(session('user_id'));
+    	$user = $this::get(session('user.user_id'));
     	$oldPwd = $user->password;
     	if(!password_verify($data['oldPassword'], $oldPwd)){
     		return ['code'=>0, 'msg'=>'旧密码有误'];

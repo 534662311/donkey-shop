@@ -30,7 +30,6 @@ class Order extends Controller
                 $goods[$k]['cover'] = $cover;
             }
         }
-        
         return view('', [
             'cate'=>$cate,
             'goods'=>$goods,

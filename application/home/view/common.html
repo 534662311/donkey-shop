@@ -36,22 +36,22 @@
 				</ul>
 			</div>
 			<div class='pull-right clearfix'>
-				{notempty name='$Think.session.user_id'}
+				{notempty name='$Think.session.user.user_id'}
 				<ul class="nav nav-pillst pull-left">
 					<li role="presentation" class='dropdown'>
 						<a href="base_url{:url('home/User/index')}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-							{$Think.session.user_name} 
+							{$Think.session.user.user_name} 
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li>
-								<a href="base_url{:url('home/User/changePassword')}">
-									修改密码
+								<a href="/user.html">
+									个人中心
 								</a>
 							</li>
 							<li>
-								<a href="/register.html">
-									注册
+								<a href="/orderlist.html">
+									我的订单
 								</a>
 							</li>
 							<li role="separator" class="divider"></li>
@@ -90,7 +90,11 @@
 											<span class='pull-right'>x {$v.num}</span>
 										</li>
 										<li class="clearfix mt10">
-											<span class='pull-left'>款式：{$v.options[0]['color']}</span>
+											<span class='pull-left'>款式：
+												{foreach $v.options as $option}
+												{$option}
+												{/foreach}
+											</span>
 											<span class='pull-right'>价格：{$v.price}</span>
 										</li>
 						 				<li class="text-right mt10">
@@ -101,6 +105,8 @@
 										</li>
 									</ul>
 									{/foreach}
+									{else /}
+									<p>购物车空空如也~</p>
 									{/notempty}
 								</div>
 							</div>

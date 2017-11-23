@@ -16,7 +16,11 @@ class User extends Controller
      */
     public function index()
     {
-        return $this->fetch();
+        //获取所有顶级分类
+        $cate = db('Category')->where('pid',0)->select();
+        return view('', [
+            'cate'=>$cate,
+        ]);
     }
 
     /**
@@ -26,6 +30,8 @@ class User extends Controller
      */
     public function login(Request $request)
     {
+        //获取所有顶级分类
+        $cate = db('Category')->where('pid',0)->select();
         if($request->isPost()){
             $user = new UserModel();
             $re = $user->login(input('post.'));
@@ -35,7 +41,9 @@ class User extends Controller
                 $this->error($re['msg']);
             }
         }
-        return $this->fetch();
+        return view('', [
+            'cate'=>$cate
+        ]);
     }
 
     /**
@@ -46,6 +54,8 @@ class User extends Controller
      */
     public function register(Request $request)
     {
+        //获取所有顶级分类
+        $cate = db('Category')->where('pid',0)->select();
         $user = new UserModel();
         if($request->isPost()){
             $info = $user -> userRegister(input('post.'));
@@ -56,7 +66,9 @@ class User extends Controller
             }
 
         }
-        return $this->fetch();
+        return view('', [
+            'cate'=>$cate,
+        ]);
     }
 
     /**
@@ -100,8 +112,28 @@ class User extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function delete($id)
+    public function orderList($id)
     {
-        //
+        return view();
+    }
+    /**
+     * 修改密码
+     *
+     * @param  \think\Request  $request
+     * @return \think\Response
+     */
+    public function changePassword(Request $request)
+    {
+       if($request->isPost()){
+            $user = new UserModel();
+            $re = $user->changePassword(input('post.'));
+            if($re['code']){
+                session('user', null);
+                $this->success($re['msg'], '/login.html');
+            }else{
+                $this->error($re['msg']);
+            }
+        }
+        return view();
     }
 }

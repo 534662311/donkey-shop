@@ -27,13 +27,13 @@ class Cart extends Controller
      */
     public function create()
     {
-        $goods = session('cart.goods');
-        if(!is_null($goods)){
-            foreach($goods as $k=>$v){
-                $goods[$k]['cover'] = Goods::where('gid', $v['id'])->value('cover');
-            }
+        $cart = session('cart');
+        if(!is_null($cart['goods'])){
+            foreach($cart['goods'] as $k=>$v){
+                $cart['goods'][$k]['cover'] = Goods::where('gid', $v['id'])->value('cover');
+            } 
         }
-        return json($goods);
+        return json($cart);
     }
 
     /**
@@ -83,7 +83,15 @@ class Cart extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(request()->isPut()){
+            $cart = new CartHandle();
+            $data =  array();
+            $data['sid'] = $id;
+            $data['num'] = input('num');
+            $cart->update($data);
+            $goods = $this->create();
+            return $goods;
+        }
     }
 
     /**
@@ -92,11 +100,11 @@ class Cart extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function delete()
+    public function delete($id)
     {
         if(request()->isDelete()){
             $cart = new CartHandle();
-            $cart->del(input('id'));
+            $cart->del($id);
             $goods = $this->create();
             return $goods; 
         }
