@@ -1,4 +1,34 @@
 {extend name='common'}
 {block name='content'}
-	个人中心
+<div class='row'>
+	<div class='col-md-2'>
+		{include file='user/nav'}
+	</div>
+	<div class='col-md-10'>
+		<div class='panel panel-default'>
+			<div class='panel-heading'>
+				<h4>个人信息</h4>
+			</div>
+			<div class='panel-body'>
+				<form method='post'>
+					<div class="form-group">
+						<label>手机号</label>
+						<input type="text" class="form-control" name='phone' value="{$userinfo.phone}">
+					</div>
+					<div class="form-group">
+						<label>邮箱</label>
+						<input type="email" class="form-control" name='email' value="{$userinfo.email}">
+					</div>
+					<div class="form-group">
+						<label>昵称</label>
+						<input type="text" class="form-control" name='username' value="{$userinfo.username}">
+					</div>
+					<div class="form-group text-right">
+						<button type='submit' class='btn btn-danger'>提交修改</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 {/block}

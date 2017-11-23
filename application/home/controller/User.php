@@ -6,6 +6,8 @@ use think\Controller;
 use think\Request;
 use think\Session;
 use app\common\model\User as UserModel;
+use app\common\model\Category;
+use app\common\model\Userinfo;
 
 class User extends Controller
 {
@@ -18,8 +20,28 @@ class User extends Controller
     {
         //获取所有顶级分类
         $cate = db('Category')->where('pid',0)->select();
+        $uid = session('user.user_id');
+        $userinfo = UserModel::get($uid);
+        $data = array();
+        $data = input('post.');
+        $data['uid'] = $uid;
+        //更新用户信息
+        if(request()->isPost()){
+            $data = array();
+            $data = input('post.');
+            $data['uid'] = $uid;
+            $userModel = new UserModel();
+            $re = $userModel->updateUser($data);
+            if($re['code']){
+                $this->success($re['msg']);
+            }else{
+                $this->error($re['msg']);
+            }
+        }
         return view('', [
             'cate'=>$cate,
+            'user'=>true,
+            'userinfo'=>$userinfo,
         ]);
     }
 
@@ -31,7 +53,7 @@ class User extends Controller
     public function login(Request $request)
     {
         //获取所有顶级分类
-        $cate = db('Category')->where('pid',0)->select();
+        $cate = Category::get(['pid'=>0]);
         if($request->isPost()){
             $user = new UserModel();
             $re = $user->login(input('post.'));
@@ -84,37 +106,19 @@ class User extends Controller
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * 删除指定资源
      *
      * @param  int  $id
      * @return \think\Response
      */
-    public function orderList($id)
+    public function orderList()
     {
-        return view();
+        //获取所有顶级分类
+        $cate = Category::get(['pid'=>0]);
+        return view('', [
+            'orderList'=>true,
+            'cate'=>$cate,
+        ]);
     }
     /**
      * 修改密码
@@ -124,6 +128,8 @@ class User extends Controller
      */
     public function changePassword(Request $request)
     {
+        //获取所有顶级分类
+        $cate = Category::get(['pid'=>0]);
        if($request->isPost()){
             $user = new UserModel();
             $re = $user->changePassword(input('post.'));
@@ -134,6 +140,48 @@ class User extends Controller
                 $this->error($re['msg']);
             }
         }
-        return view();
+        return view('', [
+            'change'=>true,
+            'cate'=>$cate,
+        ]);
+    }
+    //我的地址
+    public function address(){
+        //获取所有顶级分类
+        $cate = Category::get(['pid'=>0]);
+        $uid = session('user.user_id');
+        $user = UserModel::get($uid, 'userInfo');
+        $userInfo = $user->userInfo;
+        if(request()->isPost()){
+            $address['detail'] = input('post.detail');
+            $address = implode('', input('post.'));
+            $re = $user->userInfo()->save([
+                'address'=>$address,
+            ]);
+            if($re){
+                $this->success('新增地址成功');
+            }
+        }
+        return view('', [
+            'address'=>true,
+            'cate'=>$cate,
+            'userInfo'=>$userInfo,
+        ]);
+    }
+    //删除地址
+    public function delete($id){
+        if(Userinfo::destroy($id)){
+            $this->success('删除成功');
+        }
+    }
+    //更新地址
+    public function updateAddress($id){
+        if(request()->isPut()){
+            $userinfo = Userinfo::get($id);
+            $userinfo->address = input('put.address');
+            if($userinfo->save()){
+                return json($userinfo);
+            }
+        }
     }
 }

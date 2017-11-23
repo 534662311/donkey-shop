@@ -80,5 +80,32 @@ class User extends Model
     	}else{
     		return ['code'=>1, 'msg'=>'密码修改失败！'];
     	}
-    }
+	}
+	//更新用户信息
+	public function updateUser($data){
+		$userValidate = Loader::validate('User');
+		if(!$userValidate->check($data)){
+			return ['code'=>0, 'msg'=>$userValidate->getError()];
+		}
+		$user = $this->where('uid', $data['uid'])->find();
+		//手机、邮箱不能重复
+		$phoneCheck = $this->where('is_admin', 0)->where('phone', $data['phone'])->find();
+		if($phoneCheck && $user->phone!==$data['phone']){
+			return ['code'=>0, 'msg'=>'该手机已绑定其他帐号'];
+		}
+		$emailCheck = $this->where('is_admin', 0)->where('email', $data['email'])->find();
+		if($emailCheck && $user->email!==$data['email']){
+			return ['code'=>0, 'msg'=>'该邮箱已绑定其他帐号'];
+		}
+		$user->phone = $data['phone'];
+		$user->username = $data['username'];
+		$user->email = $data['email'];
+		if($user->save()){
+			return ['code'=>1, 'msg'=>'更新成功'];
+		}
+	}
+	//关联地址表
+	public function userInfo(){
+		return $this->hasMany('Userinfo', 'uid');
+	}
 }

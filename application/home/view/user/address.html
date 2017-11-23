@@ -1,0 +1,88 @@
+{extend name='common'}
+{block name='content'}
+<style>
+    .form-control{
+        display: inline-block;
+        width: 300px;;
+    }
+    textarea.form-control{
+        width: 100%;
+    }
+</style>
+<div class='row'>
+    <div class='col-md-2'>
+        {include file='user/nav'}
+    </div>
+    <div class='col-md-10'>
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h4>收货地址</h4>
+            </div>
+            <div class='panel-body'>
+                <h3>地址列表</h3>
+                <table class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>地址</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $userInfo as $v}
+                        <tr>
+                            <td>{$v.id}</td>
+                            <td>
+                                <input onchange="update('{$v.id}', this)" class='user-address form-control' type="text" value='{$v.address}'>
+                            </td>
+                            <td>
+                                <a href="{:url('home/User/delete', ['id'=>$v.id])}" class='btn btn-danger delAddress'>删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        <tr><td colspan='3'></td></tr>
+                    </tbody>
+                </table>
+                <h3>添加地址</h3>
+                <div class='mt20'>
+                    <form method='post'>
+                        <div class="form-group">
+                            <select class='form-control' name="province"></select>
+                            <select class='form-control' name="city"></select>
+                            <select class='form-control' name="area"></select>
+                        </div>
+                        <div class="form-group text-right">
+                            <textarea class='form-control' name='detail' placeholder="详细地址"></textarea>
+                        </div>
+                        <div class="form-group text-right">
+                            <button type='submit' class='btn btn-danger'>提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{js href='base_url/static/js/PCASClass.js'}
+<script type='text/javascript'>
+    //初始化地区联动下拉菜单
+    new PCAS("province","city","area");
+    function update(id, e){
+        let adr = $(e).val();
+        let data = {
+                address: adr
+            }
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/home/User/updateaddress/id/'+id,
+            type: 'PUT',
+            data: data,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function(res){
+                
+            }
+        });
+    }
+</script>
+{/block}
