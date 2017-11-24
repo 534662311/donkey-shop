@@ -5,7 +5,24 @@
         width: auto;
     }
 </style>
-<table class='table order-info'>
+<div class='address-list panel panel-default'>
+    <div class='panel-heading'>收货地址</div>
+    <div class='panel-body'>
+        <div class='text-right'>
+            <a href="{:url('home/User/address')}">管理收货地址</a>
+        </div>
+        {notempty name='$address'}
+        {foreach $address as $v}
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"> {$v.address}
+            </label>
+        </div>
+        {/foreach}
+        {/notempty}
+    </div>
+</div>
+<table class='table order-info mt20'>
     <thead>
         <tr>
             <th>商品信息</th>
@@ -30,13 +47,13 @@
                     </p>
                 </div>
             </td>
-            <td>￥<span class='good-price'>{$good.price}</span></td>
+            <td>￥<em class='good-price'>{$good.price}</em></td>
             <td class='clearfix'>
                 <a href="javascript:" onclick="addGood('{$sid}', '{$good.id}', this)" class='add-num btn btn-default pull-left'>+</a>
                 <input type="text" name='good_num' value='{$good.num}' class='form-control pull-left good-num'>
                 <a href="javascript:" onclick="subGood('{$sid}', this)" class='sub-num btn btn-default pull-left'>-</a>
             </td>
-            <td>小计：<em class='total-price'>{$good.price}</em></td>
+            <td>小计：<span class='text-danger'>￥<em class='total-price'>{$good.price}</span></em></td>
             <td>
                 <a onclick="delGood('{$sid}')" href="javascript:">
                     <i class='glyphicon glyphicon-trash'></i>
@@ -54,12 +71,17 @@
     <a href="base_url" class='pull-left col-md-4'>< 继续购物</a>
     <div class='pull-right col-md-8 text-right'>
         <span>共1件商品</span>
-        <span class='col-md-offset-1'>合计：￥
-            <em class='all-price'>{$cart.total}</em>
+        <span class='col-md-offset-1'>合计：
+            <span class='text-danger'>
+                ￥<em class='all-price'>{$cart.total}</em>
+            </span>
         </span>
-        <a href="/flow.html" class='btn btn-danger col-md-offset-1'>去结账</a>
+        <a href="javascript:" class='btn btn-danger col-md-offset-1 submit-order'>提交订单</a>
     </div>
 </div>
+<form method='post'>
+    
+</form>
 <script type='text/javascript'>
     //隐藏购物车
     $('.cart-box').hide();

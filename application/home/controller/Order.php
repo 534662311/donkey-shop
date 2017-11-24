@@ -6,6 +6,7 @@ use think\Controller;
 use think\Request;
 use think\Session;
 use app\common\model\Category;
+use app\common\model\Userinfo;
 use app\common\model\Goods;
 use app\common\cart\Cart;
 
@@ -30,10 +31,14 @@ class Order extends Controller
                 $goods[$k]['cover'] = $cover;
             }
         }
+        //取出收货地址
+        $uid = session('user.user_id');
+        $address = Userinfo::all(['uid'=>$uid]);
         return view('', [
             'cate'=>$cate,
             'goods'=>$goods,
             'cart'=>$cart,
+            'address'=>$address,
         ]);
     }
 
