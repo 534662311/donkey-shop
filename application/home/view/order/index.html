@@ -15,7 +15,8 @@
         {foreach $address as $v}
         <div class="checkbox">
             <label>
-                <input type="checkbox"> {$v.address}
+                <input type="checkbox"> 
+                <span class='address'>{$v.address}</span>
             </label>
         </div>
         {/foreach}
@@ -61,6 +62,11 @@
             </td>
         </tr>
         <tr>
+            <td colspan='7'>
+                <textarea class='buyer-note form-control' placeholder="买家留言"></textarea>
+            </td>
+        </tr>
+        <tr>
             <td colspan="7"></td>
         </tr>
         {/foreach}
@@ -79,16 +85,39 @@
         <a href="javascript:" class='btn btn-danger col-md-offset-1 submit-order'>提交订单</a>
     </div>
 </div>
-<form method='post'>
-    
+<form class='off order-form' method='post'>
+    <input type="hidden" name='address' value=''>
+    <input type="hidden" name='note' value=''>
+    <input type="hidden" name='goods_id' value=''>
 </form>
 <script type='text/javascript'>
+    $(function(){
+        let form = $('.order-form');
+        //获取收货地址
+        $('.address-list input[type=checkbox]').on('change', function(){
+            form.children('input[name=address]').val($(this).next('.address').text());
+        });
+        //获取买家备注
+        $(document).on('click', '.submit-order', function(){
+            form.children('input[name=note]').val($('.buyer-note').val());
+        });
+    });
     //隐藏购物车
     $('.cart-box').hide();
+    function cartAjax(url, type, data, callBack){
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: callBack
+        });
+    }
     //增加商品
     function addGood(sid, gid, e){
         let input = $(e).next('input[name=good_num]'),
-            total = $(e).closest('tr').find('.total-price');
+            total = $(e).closest('tr').find('.total-price'),
             num = parseInt(input.val()) + 1,
             data = {
                 num: num,
@@ -101,110 +130,93 @@
             data.price = tr.find('.good-price').text();
             data.id = gid;
             data = JSON.stringify(data);
-            $.ajax({
-                url: '/cart',
-                type: 'POST',
-                data: data,
-                dataType: 'json',
-                contentType: 'application/json',
-                success: function(res){
-                    input.val(res.goods[sid].num);
-                    total.text(res.goods[sid].total);
-                    $('.all-price').text(res.total);
-                }
+            cartAjax('/cart', 'POST', data, function(res){
+                input.val(res.goods[sid].num);
+                total.text(res.goods[sid].total);
+                $('.all-price').text(res.total);
             });
         }else{
             //更新购物车
             data = JSON.stringify(data);
-            $.ajax({
-                url: '/cart/'+sid,
-                type: 'PUT',
-                data: data,
-                dataType: 'json',
-                contentType: 'application/json', 
-                success:function(res){
-                    input.val(res.goods[sid].num);
-                    total.text(res.goods[sid].total);
-                    $('.all-price').text(res.total);
-                }
+            cartAjax('/cart/'+sid, 'PUT', data, function(res){
+                input.val(res.goods[sid].num);
+                total.text(res.goods[sid].total);
+                $('.all-price').text(res.total);
             });
         }
     }
     //减少商品
     function subGood(sid, e){
-        let input = $(e).prev('input[name=good_num]');
-        let total = $(e).closest('tr').find('.total-price');
-        let num = parseInt(input.val()) - 1;
+        let input = $(e).prev('input[name=good_num]'),
+            total = $(e).closest('tr').find('.total-price'),
+            num = parseInt(input.val()) - 1;
         if(num < 0){
             input.val(0);
             return;
         }
         let data = {
-                num: num,
-            };
+            num: num,
+        };
         data = JSON.stringify(data);
-        $.ajax({
-            url: '/cart/'+sid,
-            type: 'PUT',
-            data: data,
-            dataType: 'json',
-            contentType: 'application/json', 
-            success:function(res){
-                if(res.goods[sid]){
-                    input.val(res.goods[sid].num);
-                    total.text(res.goods[sid].total);
-                    $('.all-price').text(res.total);
-                }else{
-                    input.val(0);
-                    total.text(0);
-                    $('.all-price').text(0);
-                }
+        cartAjax('/cart/'+sid, 'PUT', data, function(res){
+            if(res.goods[sid]){
+                input.val(res.goods[sid].num);
+                total.text(res.goods[sid].total);
+                $('.all-price').text(res.total);
+            }else{
+                input.val(0);
+                total.text(0);
+                $('.all-price').text(0);
             }
         });
     }
     //删除商品
     function delGood(sid){
-        $.ajax({
-            url: '/cart/'+sid,
-            type: 'DELETE',
-            dataType: 'json',
-            contentType: 'application/json', 
-            success:function(res){
-                let div = $('<div></div>');
-                $.each(res, function(k, v){
-                    let temp = `
-                    <tr>
-                        <td class='clearfix'>
-                            <a href="#" class="thumbnail pull-left">
-                                <img width='50' src="base_url/${v.cover}" alt="${v.name}">
-                            </a>
-                            <div class='pull-left col-md-offset-1'>
-                                <p>${v.name}</p>
-                                <p>款式：${v.options.color}</p>
-                            </div>
-                        </td>
-                        <td>￥${v.price}</td>
-                        <td class='clearfix'>
-                            <a href="javascript:" onclick="addGood('${k}', this)" class='add-num btn btn-default pull-left'>+</a>
-                            <input type="text" name='good_num' value='${v.num}' class='form-control pull-left'>
-                            <a href="javascript:" onclick="subGood('${k}', this)" class='sub-num btn btn-default pull-left'>-</a>
-                        </td>
-                        <td>小计：${v.price}</td>
-                        <td>
-                            <a onclick="delGood('${k}')" href="javascript:">
-                                <i class='glyphicon glyphicon-trash'></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7"></td>
-                    </tr>
-                    `;
-                    div.append(temp);
-                });
-                $('.order-info tbody').html(div.html());
-                $('.total-price').text(0);
+        cartAjax('/cart/'+sid, 'DELETE', '', function(res){
+            let div = $('<div></div>');
+            if(!res.goods){
+                //购物车为空时清空所有商品
+                $('.order-info tbody').html('');
+                $('.all-price').text(0);
+                return;
             }
+            $.each(res.goods, function(k, v){
+                let temp = `
+                <tr>
+                    <td class='clearfix'>
+                        <a href="#" class="thumbnail pull-left">
+                            <img width='50' src="base_url/${v.cover}" alt="${v.name}">
+                        </a>
+                        <div class='pull-left col-md-offset-1'>
+                            <p>${v.name}</p>
+                            <p>款式：${v.options.color}</p>
+                        </div>
+                    </td>
+                    <td>￥<span class='text-danger'>${v.price}</span></td>
+                    <td class='clearfix'>
+                        <a href="javascript:" onclick="addGood('${k}', this)" class='add-num btn btn-default pull-left'>+</a>
+                        <input type="text" name='good_num' value='${v.num}' class='form-control pull-left'>
+                        <a href="javascript:" onclick="subGood('${k}', this)" class='sub-num btn btn-default pull-left'>-</a>
+                    </td>
+                    <td>小计：<span class='text-danger'>${v.price}</span></td>
+                    <td>
+                        <a onclick="delGood('${k}')" href="javascript:">
+                            <i class='glyphicon glyphicon-trash'></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='7'>
+                        <textarea class='form-control buyer-note' placeholder="买家留言"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                </tr>`;
+                div.append(temp);
+            });
+            $('.order-info tbody').html(div.html());
+            $('.all-price').text(res.total);
         });
     }
 </script>

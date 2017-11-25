@@ -11,16 +11,6 @@ use app\common\model\Goods;
 class Cart extends Controller
 {
     /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
-        
-    }
-
-    /**
      * 显示创建资源表单页.
      *
      * @return \think\Response
@@ -50,28 +40,6 @@ class Cart extends Controller
             $goods = $this->create();
             return $goods;
         }
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
-
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

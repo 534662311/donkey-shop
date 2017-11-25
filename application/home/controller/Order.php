@@ -9,6 +9,7 @@ use app\common\model\Category;
 use app\common\model\Userinfo;
 use app\common\model\Goods;
 use app\common\cart\Cart;
+use app\common\model\Order as OrderModel;
 
 class Order extends Controller
 {
@@ -34,6 +35,9 @@ class Order extends Controller
         //取出收货地址
         $uid = session('user.user_id');
         $address = Userinfo::all(['uid'=>$uid]);
+        if(request()->isPost()){
+            $order = new OrderModel();
+        }
         return view('', [
             'cate'=>$cate,
             'goods'=>$goods,

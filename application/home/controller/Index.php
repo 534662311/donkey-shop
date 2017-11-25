@@ -1,6 +1,7 @@
 <?php
 namespace app\home\controller;
 use think\Controller;
+use think\Cache;
 use app\common\model\Goods;
 use app\common\model\Category;
 
@@ -13,9 +14,7 @@ class Index extends Controller
         //取出首页分类
         $indexCate = Category::where(['iscover'=>1])->column('cid');
         //取出首页分类下的所有商品
-        
         $goods = Goods::where('pid', 'in', $indexCate)->select();
-        
         return view('', ['goods'=>$goods, 'cate'=>$cate]);
     }
 }
