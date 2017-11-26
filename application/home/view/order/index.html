@@ -12,10 +12,10 @@
             <a href="{:url('home/User/address')}">管理收货地址</a>
         </div>
         {notempty name='$address'}
-        {foreach $address as $v}
-        <div class="checkbox">
+        {foreach $address as $k=>$v}
+        <div class="radio">
             <label>
-                <input type="checkbox"> 
+                <input type="radio" value='{$v.address}' {eq name='$k' value='0'}checked{/eq} name='address'> 
                 <span class='address'>{$v.address}</span>
             </label>
         </div>
@@ -38,7 +38,7 @@
         {foreach $goods as $sid=>$good}
         <tr>
             <td class='clearfix'>
-                <a href="#" class="thumbnail pull-left">
+                <a href="/details/{$good.id}.html" target="_blank" class="thumbnail pull-left">
                     <img width='50' src="base_url/{$good.cover}" alt="{$good.name}">
                 </a>
                 <div class='pull-left col-md-offset-1'>
@@ -52,7 +52,7 @@
             <td class='clearfix'>
                 <a href="javascript:" onclick="addGood('{$sid}', '{$good.id}', this)" class='add-num btn btn-default pull-left'>+</a>
                 <input type="text" name='good_num' value='{$good.num}' class='form-control pull-left good-num'>
-                <a href="javascript:" onclick="subGood('{$sid}', this)" class='sub-num btn btn-default pull-left'>-</a>
+                <a href="javascript:" onclick="subGood('{$sid}', this)" class='sub-num btn btn-default pull-left'>-</a>      
             </td>
             <td>小计：<span class='text-danger'>￥<em class='total-price'>{$good.price}</span></em></td>
             <td>
@@ -61,15 +61,10 @@
                 </a>
             </td>
         </tr>
-        <tr>
-            <td colspan='7'>
-                <textarea class='buyer-note form-control' placeholder="买家留言"></textarea>
-            </td>
-        </tr>
+        {/foreach}
         <tr>
             <td colspan="7"></td>
         </tr>
-        {/foreach}
         {/notempty}
     </tbody>
 </table>
@@ -85,21 +80,16 @@
         <a href="javascript:" class='btn btn-danger col-md-offset-1 submit-order'>提交订单</a>
     </div>
 </div>
-<form class='off order-form' method='post'>
-    <input type="hidden" name='address' value=''>
-    <input type="hidden" name='note' value=''>
-    <input type="hidden" name='goods_id' value=''>
-</form>
 <script type='text/javascript'>
     $(function(){
         let form = $('.order-form');
         //获取收货地址
-        $('.address-list input[type=checkbox]').on('change', function(){
+        $('.address-list input[type=radio]').on('change', function(){
             form.children('input[name=address]').val($(this).next('.address').text());
         });
         //获取买家备注
-        $(document).on('click', '.submit-order', function(){
-            form.children('input[name=note]').val($('.buyer-note').val());
+        $('.buyer-note').on('change', function(){
+            form.children('input[name=note]').val($(this).val());
         });
     });
     //隐藏购物车
@@ -166,7 +156,7 @@
             }else{
                 input.val(0);
                 total.text(0);
-                $('.all-price').text(0);
+                $('.all-price').text(res.total);
             }
         });
     }
@@ -174,12 +164,6 @@
     function delGood(sid){
         cartAjax('/cart/'+sid, 'DELETE', '', function(res){
             let div = $('<div></div>');
-            if(!res.goods){
-                //购物车为空时清空所有商品
-                $('.order-info tbody').html('');
-                $('.all-price').text(0);
-                return;
-            }
             $.each(res.goods, function(k, v){
                 let temp = `
                 <tr>

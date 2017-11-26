@@ -128,8 +128,12 @@
                 contentType: 'application/json',
                 dataType: "json",
                 success: function(res){
-                    let fragment = $('<div></div>'); 
-                    $.each(res, function(i, v){
+					if(!res.total){
+						$('.cart-list').html('<p>购物车空空如也~</p>');
+						return;
+					}
+                    let fragment = $('<div></div>');
+                    $.each(res.goods, function(i, v){
                         let temp = `
                         <ul class='good'>
                             <li class="clearfix mt10">
@@ -137,7 +141,7 @@
                                 <span class='pull-right'>x ${v.num}</span>
                             </li>
                             <li class="clearfix mt10">
-                                <span class='pull-left'>款式：${v.options[0]['color']}</span>
+                                <span class='pull-left'>款式：${v.options['color']}</span>
                                 <span class='pull-right'>价格：${v.price}</span>
                             </li>
                             <li class="text-right mt10">
