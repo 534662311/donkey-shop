@@ -1,0 +1,35 @@
+{extend name='common'}
+{block name='content'}
+{include file='system_common/header'}
+<div class="panel panel-default mt20">
+    <div class="panel-heading">
+        <h3 class="panel-title">角色列表</h3>
+    </div>
+    <div class="panel-body">
+        <table class='table'>
+            <thead>
+                <tr>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $roles as $v}
+                <tr>
+                    <td>{$v.name}</td>
+                    <td>
+                        <a class='btn btn-default' href="/admin/role/edit.html?id={$v.id}">编辑</a>
+                        <a class='btn btn-warning' href="/admin/Role/access.html?id={$v.id}">设置权限</a>
+                    </td>
+                </tr>
+                {/foreach}
+                <tr>
+                    <td colspan='2'>
+                        <a class='btn btn-info' href="/admin/Role/add.html">添加角色</a>   
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}

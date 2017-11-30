@@ -7,8 +7,9 @@ use think\Request;
 use think\Loader;
 use app\common\model\Goods as GoodsModel;
 use app\common\model\Category;
+use app\admin\controller\Common;
 
-class Goods extends Controller
+class Goods extends Common
 {
     /**
      * 显示资源列表

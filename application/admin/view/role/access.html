@@ -1,0 +1,26 @@
+{extend name='common'}
+{block name='content'}
+{include file='system_common/header'}
+<div class="panel panel-default mt20">
+    <div class="panel-heading">
+    <h3 class="panel-title">编辑角色</h3>
+    </div>
+    <div class="panel-body">
+        <h4>为 {$role.name} 分配权限</h4>
+        <form action="" method='post'>
+            <div class='roles-list clearfix'>
+                {foreach $access_list as $v}
+                <div class="checkbox pull-left mr10">
+                    <label>
+                        <input {in name='$v.id' value='$ids'}checked{/in} type="checkbox" name='{$v.title}' value='{$v.id}'>{$v.title}
+                    </label>
+                </div>
+                {/foreach}
+            </div>
+            <div class="form-group mt20 text-right">
+                <button type='submit' class='btn btn-danger'>提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}

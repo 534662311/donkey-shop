@@ -1,0 +1,24 @@
+{extend name='common'}
+{block name='content'}
+{include file='system_common/header'}
+<div class="panel panel-default mt20">
+    <div class="panel-heading">
+    <h3 class="panel-title">添加权限</h3>
+    </div>
+    <div class="panel-body">
+        <form action="" method='post'>
+            <div class="form-group mt20">
+                <label>权限名称</label>
+                <input name="title" type="text" class="form-control" placeholder="请输入角色名称">
+            </div>
+            <div class="form-group mt20">
+                <label>urls</label>
+                <textarea name="urls" class="form-control" placeholder="请输入url，一行一个url"></textarea>
+            </div>
+            <div class="form-group mt20 text-right">
+                <button type='submit' class='btn btn-danger'>提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}

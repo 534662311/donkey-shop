@@ -7,8 +7,9 @@ use think\Request;
 use app\common\model\Category as CateModel;
 use app\common\model\Goods;
 use think\Loader;
+use app\admin\controller\Common;
 
-class Category extends Controller
+class Category extends Common
 {
     protected $model;
     public function __construct(){

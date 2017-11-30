@@ -4,8 +4,9 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Request;
+use app\admin\controller\Common;
 
-class Order extends Controller
+class Order extends Common
 {
     /**
      * 显示资源列表

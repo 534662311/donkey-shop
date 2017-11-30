@@ -7,8 +7,10 @@ use think\Request;
 use think\Session;
 use app\common\model\User as UserModel;
 use app\common\model\Order;
+use app\common\model\Role;
+use app\admin\controller\Common;
 
-class User extends Controller
+class User extends Common
 {
     /**
      * 显示资源列表
@@ -18,9 +20,11 @@ class User extends Controller
     public function index()
     {
         $this->assign('user', 'idx');
+        //取出所有用户
         $data = UserModel::all();
-        $this->assign('data', $data);
-        return $this->fetch();
+        return view('', [
+            'data'=>$data,
+        ]);
     }
 
     /**
@@ -73,7 +77,41 @@ class User extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = UserModel::get($id, 'roles');
+        //取出所有角色
+        $roles = Role::all();
+        //取出用户角色
+        $userRoles = $user->roles;
+        $ids = array();
+        foreach($userRoles as $v){
+            array_push($ids, $v['id']);
+        }
+        if(request()->isPost()){
+            $data = input('post.');
+            //新增用户角色
+            $newIds = array_diff($data, $ids);
+            if(count($newIds)){
+                foreach($newIds as $id){
+                    $user->roles()->attach($id);
+                }
+            }
+            //删除用户角色
+            $delIds = array_diff($ids, $data);
+            if(count($delIds)){
+                foreach($delIds as $id){
+                    //取出待删除的角色
+                    $role = Role::get($id);
+                    //删除用户角色
+                    $user->roles()->detach($role);
+                }
+            }
+            $this->success('编辑成功', 'admin/User/index');
+        }
+        return view('', [
+            'user'=>$user,
+            'roles'=>$roles,
+            'ids'=>$ids,
+        ]);
     }
 
     /**

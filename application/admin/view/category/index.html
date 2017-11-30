@@ -22,7 +22,7 @@
 				<td>{$v._catname}</td>
 				<td><img width='50' src="base_url/{$v.thumb}" alt="$v.catname"></td>
 				<td>
-					<a href="{:url('admin/Category/edit', ['id'=>$v.cid])}" class='btn btn-info'>编辑</a>
+					<a href="/admin/category/edit?id={$v.cid}" class='btn btn-info'>编辑</a>
 					<a href="{:url('admin/Category/delete', ['id'=>$v.cid])}" class='delete btn btn-danger'>删除</a>
 				</td>
 			</tr>

@@ -21,11 +21,11 @@ class User extends Model
 		}
 		if(isset($data['type'])&&$data['type']==='front'){
 			//前台登陆
-			$info = $this->where('phone|email',$data['username'])->where('is_admin', 0)->find();
+			$info = $this->where('phone|email',$data['username'])->find();
 			$userSign = 'customer';
 		}else{
 			//后台登陆
-			$info = $this->where('phone|email',$data['username'])->where('is_admin', 1)->find();
+			$info = $this->where('phone|email',$data['username'])->find();
 			$userSign = 'admin';
 		}
 		if(!$info){
@@ -107,5 +107,9 @@ class User extends Model
 	//关联地址表
 	public function userInfo(){
 		return $this->hasMany('Userinfo', 'uid');
+	}
+	//关联角色表
+	public function roles(){
+		return $this->belongsToMany('Role', 'user_role', 'role_id');
 	}
 }
