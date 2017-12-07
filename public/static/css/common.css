@@ -1,0 +1,97 @@
+@charset "utf-8"
+div,ul,li,p,h1,h2,h3,h4,h5,h6{
+	margin: 0;
+	padding: 0;
+}
+li{
+	list-style: none;
+}
+/*边距*/
+.mt10{
+	margin-top: 10px;
+}
+.mt20{
+	margin-top: 20px;
+}
+.mb10{
+	margin-bottom: 10px;
+}
+.mr10{
+	margin-right: 10px;
+}
+.off{
+	display: none;
+}
+/* 图片上传插件样式 */
+.img-list{
+	display: flex;
+}
+.upload-img{
+	margin-right: 20px;
+	width: 150px;
+}
+.img-list .upload-img:last-child{
+	margin-right: 0;
+}
+#inputBox{
+	margin: 0 auto;
+	width: 130px;
+	height: 30px;
+	border: 1px solid cornflowerblue;
+	color: cornflowerblue;
+	border-radius: 20px;
+	position: relative;
+	text-align: center;
+	line-height: 30px;
+	overflow: hidden;
+}
+#inputBox input{
+	width: 114%;
+	height: 40px;
+	opacity: 0;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: -14%;
+	
+}
+.imgBox{
+	text-align: left;
+}
+.imgContainer{
+	display: inline-block;
+	margin-left: 1%;
+	position: relative;
+	margin-top: 30px;
+	box-sizing: border-box;
+}
+.imgContainer img{
+	width: 150px;
+	cursor: pointer;
+}
+.imgContainer p{
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: 100%;
+	height: 30px;
+	background: black;
+	text-align: center;
+	line-height: 30px;
+	color: white;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	display: none;
+}
+.imgContainer:hover p{
+	display: block;
+}
+/* 购物车图标 */
+.buy-cart .glyphicon{
+	font-size: 20px;
+}
+/* bootstrap复选、单选框边距修正 */
+.checkbox+.checkbox, .radio+.radio {
+    margin-top: 10px;
+}
